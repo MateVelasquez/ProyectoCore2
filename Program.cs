@@ -1,11 +1,19 @@
 using Microsoft.EntityFrameworkCore;
 using ProyectoCore.Models;
 using System.Configuration;
+using Microsoft.AspNetCore.Authentication.Cookies;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
+
+builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme).AddCookie(options =>
+{
+    options.LoginPath = "/Acceso/Index";
+    options.ExpireTimeSpan = TimeSpan.FromMinutes(30);
+    options.AccessDeniedPath = "/Home/Privacy";
+}); 
 
 builder.Services.AddDbContext<CoreContext>(options =>
         options.UseSqlServer(builder.Configuration.GetConnectionString("conexion")));
@@ -25,10 +33,12 @@ app.UseStaticFiles();
 
 app.UseRouting();
 
+app.UseAuthentication();
+
 app.UseAuthorization();
 
 app.MapControllerRoute(
     name: "default",
-    pattern: "{controller=Home}/{action=Index}/{id?}");
+    pattern: "{controller=Acceso}/{action=Index}/{id?}");
 
 app.Run();

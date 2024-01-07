@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
@@ -9,8 +10,10 @@ using ProyectoCore.Models;
 
 namespace ProyectoCore.Controllers
 {
+    [Authorize(Roles = "Administrador")]
     public class TrabajadoresController : Controller
     {
+        
         private readonly CoreContext _context;
 
         public TrabajadoresController(CoreContext context)
